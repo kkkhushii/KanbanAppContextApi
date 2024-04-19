@@ -1,0 +1,124 @@
+.simplebar-content-wrapper{
+    width: auto;
+    height: 100%;
+}
+.task-list-section{
+    display: flex;
+    flex-wrap: nowrap;
+
+}
+.task-list-container{
+    width: 265px;
+    flex-shrink: 0;
+   
+}
+.connect-sorting{
+    padding: 20px;
+    border-radius: 17px;
+}
+body .connect-sorting .task-container-header  {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 3px 18px;
+}
+.hstack{
+    display: flex;
+    flex-direction:row;
+    align-items: center;
+    align-self: stretch;
+}
+.connect-sorting-content {
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+
+}
+.card-body{
+    padding: 0;
+    border-radius: 10px;
+}
+.task-header{
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 11px 13px;
+}
+.task-body .task-bottom{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+}
+.category-container {
+    display: flex;
+    justify-content: start;
+    gap: 20px; 
+    padding: 20px;
+ } 
+ .body .scrumboard .card.img-task .card-body .task-content img{
+    width: 100%;
+    height: 106px;
+ }
+ .task-content > p{
+    color:#7B8893;
+    font-size: 14px;
+
+ }
+ .task-content{
+    padding: 11px 13px;
+ }
+ .hstack{
+    color: #7B8893;
+    font-size: 0.75rem;
+ }
+ .tb-section-1 > .hstack:hover{
+
+    color:#635bff ;
+    cursor: pointer;
+ }
+ .task-container-header > h6{
+    color: #29343D;
+    font-size: 16px;
+ }
+ .add-kanban-title > svg {
+    font-size: 16px;
+    cursor: pointer;
+ }
+ .dropdown-toggle::after {
+    display: none !important;
+  }
+  #dropdown-basic > svg{
+    font-size: 16px;
+  }
+  .custom-toggle{
+    background-color: #fff;
+    border-radius: 100%;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:0;
+  }
+.custom-toggle:focus {
+    background-color: #fff;
+    border-radius: 100%;
+    border: none;
+}
+.dropdown-item:hover{
+color: #635bff;
+}
+.dropdown-item {
+    font-size: 14px;
+    color:#29343D ;
+}
+
+.AddTaskstyle{
+    margin-bottom: 10px;
+}
+.react-datepicker-wrapper{
+    width: 100%;
+
+}

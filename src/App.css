@@ -1,0 +1,14 @@
+body{
+  background-color: #fff;
+  padding: 20px;
+}
+.bg-custom{
+  overflow: hidden;
+  height: auto;
+  background-color: white;
+}
+.container{
+  min-width: 900px;   
+  width: auto;      
+  overflow-x: auto;
+}
