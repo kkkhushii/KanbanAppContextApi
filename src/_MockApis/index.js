@@ -1,4 +1,5 @@
-import mock from '../_MockApis/mock'
-import '../Data/TodoData'
+import mock from './mock'
+import '../api/TodoData'
+
 
 mock.onAny().passThrough();

@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function EditTaskModal({ show, onHide, task, editedTask, setEditedTask, onSave }) {
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedTask({ ...editedTask, [name]: value });

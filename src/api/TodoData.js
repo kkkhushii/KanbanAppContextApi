@@ -2,8 +2,7 @@ import image1 from '../assets/kanban-img-1.jpg';
 import image2 from '../assets/kanban-img-2.jpg';
 import image3 from '../assets/my-card.jpg';
 import image4 from '../assets/profilebg.jpg';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import mock from '../_MockApis/mock';
 
 
 const TodoData = [
@@ -147,7 +146,61 @@ const TodoData = [
     ]
 }
 ]
-export const mock = new MockAdapter(axios);
 
-mock.onGet('/api/Data/TodoData').reply(200, TodoData);
+mock.onGet('/api/TodoData').reply(200, TodoData);
+
+// this is for delete category  
+mock.onDelete('/api/TodoData').reply(config => {
+    const { id } = JSON.parse(config.data);
+    const updatedTodoData = TodoData.filter(category => category.id !== id);
+    return [200, updatedTodoData];
+  });
+
+//this is for clear all task
+mock.onDelete('/api/TodoData/clearTasks').reply(config => {
+    const { categoryId } = JSON.parse(config.data);
+    // Find the category by ID and clear all tasks
+    const updatedTodoData = TodoData.map(category => {
+        if (category.id === categoryId) {
+            return { ...category, child: [] }; 
+        }
+        return category;
+    });
+    return [200, updatedTodoData];
+});
+
+//add new task 
+mock.onPost('/api/TodoData/addTask').reply(config => {
+    const { categoryId, newTaskData } = JSON.parse(config.data);
+    const updatedTodoData = TodoData.map(category => {
+        if (category.id === categoryId) {
+            return { ...category, child: [...category.child, newTaskData] };
+        }
+        return category;
+    });
+    return [200, updatedTodoData];
+});
+
+mock.onPost('/api/TodoData/addCategory').reply(config => {
+    const { categoryName } = JSON.parse(config.data);
+    const newCategory = {
+        id: Math.random(),
+        name: categoryName,
+        child: []
+    };
+    TodoData.push(newCategory);
+    return [200, newCategory];
+});
+
+
+mock.onPost('/api/TodoData/updateCategory').reply(config => {
+    const { categoryId, categoryName } = JSON.parse(config.data);
+    const updatedTodoData = TodoData.map(category => {
+        if (category.id === categoryId) {
+            return { ...category, name: categoryName };
+        }
+        return category;
+    });
+    return [200, updatedTodoData];
+});
 export default TodoData;

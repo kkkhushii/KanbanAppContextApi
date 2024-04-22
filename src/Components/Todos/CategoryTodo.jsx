@@ -6,16 +6,15 @@ import TaskCoponent from '../Todos/TaskCoponent'
 import EditCategoryModal from '../Todos/TaskModal/EditCategoryModal'
 import AddNewTaskModal from '../Todos/TaskModal/AddNewTaskModal'
 import TodoDataContext from '../../ContextApi/TodoDataContext'
+import axios from 'axios'
 
 function CategoryTodo({ id }) {
 
     const { todoCategories, deleteCategory, clearAllTasks, updateCategoryName, deleteTodo, addTaskToCategory } = useContext(TodoDataContext);
-    // const [allTasks, setAllTasks] = useState(tasks);
-
     const category = todoCategories.find(cat => cat.id === id);
+    // console.log(todoCategories);
 
     const [allTasks, setAllTasks] = useState(category ? category.child : []);
-
     const [showModal, setShowModal] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState(category.name);
     const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
@@ -41,27 +40,50 @@ function CategoryTodo({ id }) {
     const handleShowEditCategoryModal = () => setShowEditCategoryModal(true);
     const handleCloseEditCategoryModal = () => setShowEditCategoryModal(false);
 
+    // const handleAddTask = () => {
 
-    // const handleSaveTask = (newTaskText) => {
-    //     setAllTasks([...allTasks, newTaskText]);
-    //     handleCloseModal();
+    //     addTaskToCategory(id, { ...newTaskData, id: Math.random(), taskImage: newTaskData.imageURL });
+    //     setNewTaskData({
+    //         taskText: '',
+    //         taskProperty: '',
+    //         date: newTaskData.date,
+    //         imageURL: ''
+    //     });
+
     // };
-    const handleAddTask = () => {
 
-        addTaskToCategory(id, { ...newTaskData, id: Math.random(), taskImage: newTaskData.imageURL });
-        setNewTaskData({
-            taskText: '',
-            taskProperty: '',
-            date: newTaskData.date,
-            imageURL: ''
-        });
-        handleCloseModal();
+
+    const handleAddTask = async () => {
+        try {
+            // Make the API call to add the new task
+            const response = await axios.post('/api/TodoData/addTask', {
+                categoryId: id,
+                newTaskData: { ...newTaskData, id: Math.random(), taskImage: newTaskData.imageURL }
+            });
+
+            // Check if the response is successful
+            if (response.status === 200) {
+                // Reset the new task data
+                setNewTaskData({
+                    taskText: '',
+                    taskProperty: '',
+                    date: newTaskData.date,
+                    imageURL: ''
+                });
+
+                handleCloseModal();
+                setNewTaskData('Task added successfully');
+                console.log('Task added successfully:', response.data);
+                // console.log(newTaskData);
+            } else {
+                // Handle unsuccessful response
+                throw new Error('Failed to add task');
+            }
+        } catch (error) {
+            // Handle error
+            console.error('Error adding task:', error);
+        }
     };
-    // const handleAddTask = (newTaskData) => {
-    //     addTaskToCategory(id, { ...newTaskData, id: Math.random() });
-    //     handleCloseModal();
-    // };
-
     const handleClearAll = () => {
         clearAllTasks(id);
         setAllTasks([]);
@@ -74,6 +96,25 @@ function CategoryTodo({ id }) {
         updateCategoryName(id, newCategoryName);
         handleCloseEditCategoryModal();
     };
+    // const handleUpdateCategory = async () => {
+    //     try {
+    //         const response = await axios.post('/api/TodoData/updateCategory', {
+    //             categoryId: id,
+    //             categoryName: newCategoryName
+    //         });
+    //         if (response.status === 200) {
+    //             // If the request is successful, update the category name locally
+    //             updateCategoryName(id, newCategoryName);
+    //             handleCloseEditCategoryModal();
+    //             setNewCategoryName(categoryName);
+    //         } else {
+    //             throw new Error('Failed to update category');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error updating category:', error);
+    //     }
+    // };
+
     const handleDeleteClick = () => {
         setShowContainer(false);
         deleteCategory(id);
@@ -98,13 +139,6 @@ function CategoryTodo({ id }) {
 
                         <div className="hstack gap-2">
                             <div className='add-kanban-title'>
-                                {/* {category.name === 'Todo' ? (<AddIcon onClick={handleShowModal} />) : ('')} */}
-
-                                {/* {category.name === 'Todo' ? (<AddIcon onClick={() => addTaskToCategory(id)} , {handleShowModal}/>) : ('')} */}
-
-
-                                {/* <AddNewTaskModal show={showModal} onHide={handleCloseModal} onSave={handleSaveTask} taskProperties={taskProperties} /> */}
-                                {/* <AddNewTaskModal categoryId={id} show={showModal} onHide={handleCloseModal} /> */}
                                 {category.name === 'Todo' && (
                                     <>
                                         <AddIcon onClick={handleShowModal} />
@@ -147,6 +181,7 @@ function CategoryTodo({ id }) {
                         {allTasks.map(task => (
                             <TaskCoponent key={task.id} task={task} onDeleteTask={handleDeleteTask} />
                         ))}
+
                     </div>
 
                 </div >

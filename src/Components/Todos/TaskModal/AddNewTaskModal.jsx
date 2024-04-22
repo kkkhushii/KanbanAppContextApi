@@ -66,6 +66,7 @@ function AddNewList({ show, onHide, onSave, taskProperties, newTaskData, setNewT
                             selected={date}
                             dateFormat="dd MMMM"
                             onChange={(date) => setNewTaskData({ ...newTaskData, date: date.toLocaleDateString('en-US', { day: 'numeric', month: 'long' }) })}
+
                             className="form-control"
                         />
                     </Form.Group>

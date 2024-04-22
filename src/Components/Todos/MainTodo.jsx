@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import CategoryTodo from '../Todos/CategoryTodo'
 import '../Todos/TodoStyle.css'
 import Header from '../Header/Header'
@@ -8,6 +8,9 @@ import TodoDataContext from '../../ContextApi/TodoDataContext'
 function MainTodo() {
 
   const { todoCategories } = useContext(TodoDataContext);
+
+
+
   return (
     <>
       <Header />
@@ -16,6 +19,7 @@ function MainTodo() {
           <CategoryTodo
             key={category.id}
             id={category.id}
+
           />
         ))}
 
