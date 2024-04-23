@@ -2,13 +2,16 @@ import { Modal, Button, Dropdown } from 'react-bootstrap';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useState } from 'react';
+import axios from 'axios'
 
 function EditTaskModal({ show, onHide, task, editedTask, setEditedTask, onSave }) {
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedTask({ ...editedTask, [name]: value });
     };
+
 
     const handlePropertyChange = (property) => {
         setEditedTask({ ...editedTask, taskProperty: property });
@@ -21,6 +24,7 @@ function EditTaskModal({ show, onHide, task, editedTask, setEditedTask, onSave }
         setEditedTask({ ...editedTask, date: formattedDate });
 
     };
+
     const handleImageChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];

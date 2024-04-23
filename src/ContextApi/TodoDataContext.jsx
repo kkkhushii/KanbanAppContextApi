@@ -38,11 +38,9 @@ export const TodoDataProvider = ({ children }) => {
         }
     };
 
-    // clear all task const clearAllTasks = async (categoryId) => {
     const clearAllTasks = async (categoryId) => {
         try {
             await axios.delete('/api/TodoData/clearTasks', { data: { categoryId } });
-            // Update todoCategories state to reflect the cleared tasks
             setTodoCategories(prevCategories =>
                 prevCategories.map(category => {
                     if (category.id === categoryId) {
@@ -59,14 +57,6 @@ export const TodoDataProvider = ({ children }) => {
     };
 
 
-    // const addCategory = (categoryName) => {
-    //     const newCategory = {
-    //         id: Math.random(),
-    //         name: categoryName,
-    //         child: []
-    //     };
-    //     setTodoCategories(prevCategories => [...prevCategories, newCategory]);
-    // };
     const addCategory = async (categoryName) => {
         try {
             const response = await axios.post('/api/TodoData/addCategory', { categoryName });
@@ -76,46 +66,44 @@ export const TodoDataProvider = ({ children }) => {
         }
     };
 
-
-    // const deleteCategory = (categoryId) => {
-    //     setTodoCategories(prevCategories => prevCategories.filter(category => category.id !== categoryId));
-    // };
-
-    // const clearAllTasks = (categoryId) => {
-    //     setTodoCategories(prevCategories => prevCategories.map(category => {
-    //         if (category.id === categoryId) {
-    //             return { ...category, child: [] };
-    //         }
-    //         return category;
-    //     }));
-    // };
-
-
     const updateCategoryName = async (categoryId, newName) => {
         try {
-            // Make a PUT request to update the category name
-            await axios.put(`/api/TodoData/updateCategory/${categoryId}`, { categoryName: newName });
+            const response = await axios.post('/api/TodoData/updateCategory', {
+                categoryId,
+                categoryName: newName
+            });
+            if (response.status === 200) {
 
-            // Update the state with the new category name
-            setTodoCategories(prevCategories =>
-                prevCategories.map(category =>
-                    category.id === categoryId ? { ...category, name: newName } : category
-                )
-            );
+                setTodoCategories(prevCategories =>
+                    prevCategories.map(category =>
+                        category.id === categoryId ? { ...category, name: newName } : category
+                    )
+                );
+            } else {
+                throw new Error('Failed to update category name');
+            }
         } catch (error) {
             console.error('Error updating category name:', error);
         }
     };
 
-    const deleteTodo = (taskId) => {
-        setTodoCategories(prevCategories => {
-            return prevCategories.map(category => {
-                const updatedChild = category.child.filter(task => task.id !== taskId);
-                return { ...category, child: updatedChild };
+    const deleteTodo = async (taskId) => {
+        try {
+            await axios.delete('/api/TodoData/deleteTask', { data: { taskId } });
+            setTodoCategories(prevCategories => {
+                return prevCategories.map(category => {
+                    const updatedChild = category.child.filter(task => task.id !== taskId);
+                    return { ...category, child: updatedChild };
+                });
             });
-        });
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                console.error('404 Error: Resource not found');
+            } else {
+                console.error('Error deleting task:', error);
+            }
+        }
     };
-
     //add task 
     const addTaskToCategory = async (categoryId, newTask) => {
         try {

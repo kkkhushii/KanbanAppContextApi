@@ -12,11 +12,11 @@ function CategoryTodo({ id }) {
 
     const { todoCategories, deleteCategory, clearAllTasks, updateCategoryName, deleteTodo, addTaskToCategory } = useContext(TodoDataContext);
     const category = todoCategories.find(cat => cat.id === id);
-    // console.log(todoCategories);
-
     const [allTasks, setAllTasks] = useState(category ? category.child : []);
     const [showModal, setShowModal] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState(category.name);
+
+
     const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
     const [showContainer, setShowContainer] = useState(true);
     const taskProperties = ['Design', 'Development', 'UI Design', 'Research', 'UX Stage', 'Data Science', 'Branding'];
@@ -40,30 +40,39 @@ function CategoryTodo({ id }) {
     const handleShowEditCategoryModal = () => setShowEditCategoryModal(true);
     const handleCloseEditCategoryModal = () => setShowEditCategoryModal(false);
 
-    // const handleAddTask = () => {
 
-    //     addTaskToCategory(id, { ...newTaskData, id: Math.random(), taskImage: newTaskData.imageURL });
-    //     setNewTaskData({
-    //         taskText: '',
-    //         taskProperty: '',
-    //         date: newTaskData.date,
-    //         imageURL: ''
-    //     });
 
-    // };
+    const handleUpdateCategory = async () => {
+        try {
 
+            const response = await axios.post('/api/TodoData/updateCategory', {
+                categoryId: id,
+                categoryName: newCategoryName
+            });
+            if (response.status === 200) {
+                updateCategoryName(newCategoryName);
+                setShowEditCategoryModal(false);
+            } else {
+
+                throw new Error('Failed to update category');
+            }
+        } catch (error) {
+
+            console.error('Error updating category:', error);
+        }
+    };
 
     const handleAddTask = async () => {
         try {
-            // Make the API call to add the new task
+
             const response = await axios.post('/api/TodoData/addTask', {
                 categoryId: id,
                 newTaskData: { ...newTaskData, id: Math.random(), taskImage: newTaskData.imageURL }
             });
 
-            // Check if the response is successful
+
             if (response.status === 200) {
-                // Reset the new task data
+
                 setNewTaskData({
                     taskText: '',
                     taskProperty: '',
@@ -74,13 +83,13 @@ function CategoryTodo({ id }) {
                 handleCloseModal();
                 setNewTaskData('Task added successfully');
                 console.log('Task added successfully:', response.data);
-                // console.log(newTaskData);
+
             } else {
-                // Handle unsuccessful response
+
                 throw new Error('Failed to add task');
             }
         } catch (error) {
-            // Handle error
+
             console.error('Error adding task:', error);
         }
     };
@@ -89,31 +98,13 @@ function CategoryTodo({ id }) {
         setAllTasks([]);
     }
 
+
     const handleDeleteTask = (taskId) => {
-        deleteTodo(id, taskId);
+        deleteTodo(taskId);
+        setAllTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
     };
-    const handleUpdateCategory = () => {
-        updateCategoryName(id, newCategoryName);
-        handleCloseEditCategoryModal();
-    };
-    // const handleUpdateCategory = async () => {
-    //     try {
-    //         const response = await axios.post('/api/TodoData/updateCategory', {
-    //             categoryId: id,
-    //             categoryName: newCategoryName
-    //         });
-    //         if (response.status === 200) {
-    //             // If the request is successful, update the category name locally
-    //             updateCategoryName(id, newCategoryName);
-    //             handleCloseEditCategoryModal();
-    //             setNewCategoryName(categoryName);
-    //         } else {
-    //             throw new Error('Failed to update category');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error updating category:', error);
-    //     }
-    // };
+
+
 
     const handleDeleteClick = () => {
         setShowContainer(false);
@@ -135,8 +126,7 @@ function CategoryTodo({ id }) {
                 <div className='connect-sorting connect-sorting-todo' style={{ backgroundColor }}>
 
                     <div className='task-container-header'>
-                        <h6 className='fw-semibold'>{category.name}</h6>
-
+                        <h6 className='fw-semibold'>{newCategoryName}</h6>
                         <div className="hstack gap-2">
                             <div className='add-kanban-title'>
                                 {category.name === 'Todo' && (

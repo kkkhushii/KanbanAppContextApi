@@ -1,8 +1,6 @@
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useState } from 'react';
 
 function EditCategoryModal({ showModal, handleCloseModal, newCategoryName, setNewCategoryName, handleUpdateCategory }) {
-
 
     return (
         <Modal show={showModal} onHide={handleCloseModal}>
@@ -20,6 +18,7 @@ function EditCategoryModal({ showModal, handleCloseModal, newCategoryName, setNe
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
                 <Button variant="primary" onClick={handleUpdateCategory}>Save</Button>
+
             </Modal.Footer>
         </Modal>
     )

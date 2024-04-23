@@ -203,4 +203,30 @@ mock.onPost('/api/TodoData/updateCategory').reply(config => {
     });
     return [200, updatedTodoData];
 });
+
+//edittask
+mock.onPut('/api/TodoData/editTask').reply(config => {
+    const { taskId, newData } = JSON.parse(config.data);
+    TodoData.forEach(category => {
+        category.child.forEach(task => {
+            if (task.id === taskId) {
+                Object.assign(task, newData);
+            }
+        });
+    });
+
+    return [200, TodoData];
+});
+
+// deletetask
+let tasks = [];
+mock.onDelete('/api/TodoData/deleteTask').reply(config => {
+    const { taskId } = JSON.parse(config.data);
+
+     tasks = tasks.filter(task => task.id !== taskId);
+  
+    return [200, { message: 'Task deleted successfully' }];
+  });
+
+
 export default TodoData;

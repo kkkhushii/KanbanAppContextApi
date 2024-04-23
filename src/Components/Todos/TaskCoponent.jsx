@@ -6,6 +6,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Dropdown } from 'react-bootstrap';
 import EditTaskModal from '../Todos/TaskModal/EditTaskModal';
 import { useState } from 'react'
+import axios from 'axios'
 
 function TaskCoponent({ task, onDeleteTask }) {
 
@@ -16,6 +17,9 @@ function TaskCoponent({ task, onDeleteTask }) {
 
     const handleShowEditModal = () => setShowEditModal(true);
     const handleCloseEditModal = () => setShowEditModal(false);
+
+
+
 
     const backgroundColor = editedTask.taskProperty === 'Design' ? '#36c76c' :
         editedTask.taskProperty === 'Developement' ? '#ffd648' :
@@ -28,6 +32,23 @@ function TaskCoponent({ task, onDeleteTask }) {
     const handleSaveEditedTask = () => {
         handleCloseEditModal();
     };
+
+
+    // const handleSaveEditedTask = async () => {
+    //     try {
+
+    //         const response = await axios.put(`/api/tasks/${editedTask.id}`, editedTask);
+
+    //         setEditedTask(response.data);
+
+    //         handleCloseEditModal();
+    //     } catch (error) {
+    //         console.error('Error editing task:', error);
+
+    //     }
+    // };
+
+
     const handleDeleteClick = () => {
         onDeleteTask(task.id);
 
@@ -56,6 +77,7 @@ function TaskCoponent({ task, onDeleteTask }) {
                         setEditedTask={setEditedTask}
                         onSave={handleSaveEditedTask}
                     />
+
                 </div>
             </div>
             <div className='task-content'>
