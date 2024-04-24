@@ -5,7 +5,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Dropdown } from 'react-bootstrap';
 import EditTaskModal from '../Todos/TaskModal/EditTaskModal';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 function TaskCoponent({ task, onDeleteTask }) {
@@ -45,6 +45,47 @@ function TaskCoponent({ task, onDeleteTask }) {
             console.error('Error editing task:', error);
         }
     };
+
+
+    // const handleSaveEditedTask = async (editedTaskData) => {
+    //     try {
+    //         console.log('Edited Task Data:', editedTaskData); // Log the edited task data
+
+    //         const response = await fetch('/api/TodoData/editTask', {
+
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 taskId: editedTaskData.id,
+    //                 newData: editedTaskData,
+    //             }),
+    //         })
+
+    //         // const response = await fetch('/api/TodoData/editTask');
+    //         // console.log(response);
+    //         // const json = await response.json();
+    //         // setEditedTask(json);
+
+
+    //         if (!response.ok) {
+    //             throw new Error('Failed to edit task');
+    //         }
+
+    //         // Update the task data in the state if the request is successful
+    //         setEditedTask(editedTaskData);
+    //         console.log('Edited Task Data:', editedTaskData);
+
+    //     } catch (error) {
+    //         console.error('Error editing task:', error);
+    //         // Handle the error or display an error message to the user
+    //     }
+    // };
+
+
+
+
 
     const handleDeleteClick = () => {
         onDeleteTask(task.id);

@@ -37,6 +37,31 @@ function EditTaskModal({ show, onHide, editedTask, onSave }) {
         onSave(tempEditedTask);
         onHide();
     };
+    // const handleSaveChanges = async () => {
+    //     try {
+    //         const response = await fetch('/api/TodoData/editTask', {
+    //             method: 'PUT',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 taskId: tempEditedTask.id,
+    //                 newData: tempEditedTask,
+    //             }),
+    //         });
+    //         if (!response.ok) {
+    //             throw new Error('Failed to edit task');
+    //         }
+    //         const updatedTaskData = await response.json(); // If the server responds with updated task data
+    //         console.log(updatedTaskData);
+    //         onSave(updatedTaskData);
+    //         onHide();
+    //     } catch (error) {
+    //         console.error('Error editing task:', error);
+    //         // Display an error message to the user or handle the error appropriately
+    //     }
+    // };
+
 
     return (
         <Modal show={show} onHide={onHide}>
@@ -127,6 +152,7 @@ function EditTaskModal({ show, onHide, editedTask, onSave }) {
             <Modal.Footer>
                 <Button variant="secondary" onClick={onHide}>Close</Button>
                 <Button variant="primary" onClick={handleSaveChanges}>Save Changes</Button>
+
             </Modal.Footer>
         </Modal>
     )
