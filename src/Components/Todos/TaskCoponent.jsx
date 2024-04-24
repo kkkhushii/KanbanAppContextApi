@@ -19,8 +19,6 @@ function TaskCoponent({ task, onDeleteTask }) {
     const handleCloseEditModal = () => setShowEditModal(false);
 
 
-
-
     const backgroundColor = editedTask.taskProperty === 'Design' ? '#36c76c' :
         editedTask.taskProperty === 'Developement' ? '#ffd648' :
             editedTask.taskProperty === 'Mobile' ? '#635bff' :
@@ -29,35 +27,35 @@ function TaskCoponent({ task, onDeleteTask }) {
                         editedTask.taskProperty === 'Data Science' ? '#ff6692' :
                             editedTask.taskProperty === 'Branding' ? '#36c76c' : '#fff';
 
-    const handleSaveEditedTask = () => {
-        handleCloseEditModal();
+
+
+    const handleSaveEditedTask = async (editedTaskData) => {
+        try {
+            const response = await axios.put('/api/TodoData/editTask', {
+                taskId: editedTaskData.id,
+                newData: editedTaskData
+            });
+            if (response.status === 200) {
+                setEditedTask(editedTaskData);
+            } else {
+
+                throw new Error('Failed to edit task');
+            }
+        } catch (error) {
+            console.error('Error editing task:', error);
+        }
     };
-
-
-    // const handleSaveEditedTask = async () => {
-    //     try {
-
-    //         const response = await axios.put(`/api/tasks/${editedTask.id}`, editedTask);
-
-    //         setEditedTask(response.data);
-
-    //         handleCloseEditModal();
-    //     } catch (error) {
-    //         console.error('Error editing task:', error);
-
-    //     }
-    // };
-
 
     const handleDeleteClick = () => {
         onDeleteTask(task.id);
-
     };
+
     return (
         <div className='card-body bg-white' >
             <div className='task-header'>
                 <div>
                     <h4>{editedTask.task}</h4>
+
                 </div>
                 <div className='dropdown'>
                     <Dropdown>
@@ -69,15 +67,14 @@ function TaskCoponent({ task, onDeleteTask }) {
                             <Dropdown.Item onClick={handleDeleteClick}> <DeleteIcon /> Delete</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
+
                     <EditTaskModal
                         show={showEditModal}
                         onHide={handleCloseEditModal}
                         task={task}
                         editedTask={editedTask}
-                        setEditedTask={setEditedTask}
                         onSave={handleSaveEditedTask}
                     />
-
                 </div>
             </div>
             <div className='task-content'>

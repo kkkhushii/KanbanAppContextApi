@@ -1,7 +1,13 @@
+import { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
-function EditCategoryModal({ showModal, handleCloseModal, newCategoryName, setNewCategoryName, handleUpdateCategory }) {
+function EditCategoryModal({ showModal, handleCloseModal, handleUpdateCategory, initialCategoryName }) {
 
+    const [newCategoryName, setNewCategoryName] = useState(initialCategoryName);
+    const handleSave = () => {
+        handleUpdateCategory(newCategoryName);
+        handleCloseModal();
+    };
     return (
         <Modal show={showModal} onHide={handleCloseModal}>
             <Modal.Header closeButton>
@@ -14,10 +20,11 @@ function EditCategoryModal({ showModal, handleCloseModal, newCategoryName, setNe
                     value={newCategoryName}
                     onChange={(e) => setNewCategoryName(e.target.value)}
                 />
+
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>
-                <Button variant="primary" onClick={handleUpdateCategory}>Save</Button>
+                <Button variant="primary" onClick={handleSave}>Save</Button>
 
             </Modal.Footer>
         </Modal>

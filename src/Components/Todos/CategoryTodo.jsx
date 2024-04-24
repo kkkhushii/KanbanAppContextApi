@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { Dropdown } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -10,13 +10,11 @@ import axios from 'axios'
 
 function CategoryTodo({ id }) {
 
-    const { todoCategories, deleteCategory, clearAllTasks, updateCategoryName, deleteTodo, addTaskToCategory } = useContext(TodoDataContext);
+    const { todoCategories, deleteCategory, clearAllTasks, deleteTodo } = useContext(TodoDataContext);
     const category = todoCategories.find(cat => cat.id === id);
     const [allTasks, setAllTasks] = useState(category ? category.child : []);
     const [showModal, setShowModal] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState(category.name);
-
-
     const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
     const [showContainer, setShowContainer] = useState(true);
     const taskProperties = ['Design', 'Development', 'UI Design', 'Research', 'UX Stage', 'Data Science', 'Branding'];
@@ -27,6 +25,7 @@ function CategoryTodo({ id }) {
         date: new Date(),
         imageURL: null
     });
+
 
     // this is for add task in category modal
     const handleShowModal = () => {
@@ -41,26 +40,22 @@ function CategoryTodo({ id }) {
     const handleCloseEditCategoryModal = () => setShowEditCategoryModal(false);
 
 
-
-    const handleUpdateCategory = async () => {
+    const handleUpdateCategory = async (updatedName) => {
         try {
-
             const response = await axios.post('/api/TodoData/updateCategory', {
                 categoryId: id,
-                categoryName: newCategoryName
+                categoryName: updatedName
             });
             if (response.status === 200) {
-                updateCategoryName(newCategoryName);
-                setShowEditCategoryModal(false);
+                setNewCategoryName(updatedName);
             } else {
-
                 throw new Error('Failed to update category');
             }
         } catch (error) {
-
             console.error('Error updating category:', error);
         }
     };
+
 
     const handleAddTask = async () => {
         try {
@@ -104,8 +99,6 @@ function CategoryTodo({ id }) {
         setAllTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
     };
 
-
-
     const handleDeleteClick = () => {
         setShowContainer(false);
         deleteCategory(id);
@@ -148,9 +141,7 @@ function CategoryTodo({ id }) {
                                 <EditCategoryModal
                                     showModal={showEditCategoryModal}
                                     handleCloseModal={handleCloseEditCategoryModal}
-                                    categoryId={id}
-                                    newCategoryName={newCategoryName}
-                                    setNewCategoryName={setNewCategoryName}
+                                    initialCategoryName={newCategoryName}
                                     handleUpdateCategory={handleUpdateCategory}
                                 />
                             </div>

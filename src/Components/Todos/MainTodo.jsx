@@ -8,9 +8,6 @@ import TodoDataContext from '../../ContextApi/TodoDataContext'
 function MainTodo() {
 
   const { todoCategories } = useContext(TodoDataContext);
-
-
-
   return (
     <>
       <Header />

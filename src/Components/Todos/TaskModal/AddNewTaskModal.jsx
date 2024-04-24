@@ -10,7 +10,6 @@ function AddNewList({ show, onHide, onSave, taskProperties, newTaskData, setNewT
         onSave();
         updateTasks();
     };
-
     return (
         <Modal show={show} onHide={onHide}>
             <Modal.Header closeButton>
@@ -70,7 +69,6 @@ function AddNewList({ show, onHide, onSave, taskProperties, newTaskData, setNewT
                             className="form-control"
                         />
                     </Form.Group>
-
                 </Form>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={onHide}>

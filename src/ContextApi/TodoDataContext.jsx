@@ -9,15 +9,13 @@ export const TodoDataProvider = ({ children }) => {
 
     const [todoCategories, setTodoCategories] = useState([]);
 
-
     // this is for get data 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('/api/TodoData');
                 setTodoCategories(response.data);
-                console.log(todoCategories);
-
+                // console.log(todoCategories);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -44,11 +42,10 @@ export const TodoDataProvider = ({ children }) => {
             setTodoCategories(prevCategories =>
                 prevCategories.map(category => {
                     if (category.id === categoryId) {
-                        return { ...category, child: [] }; // Clear all tasks for this category
+                        return { ...category, child: [] };
 
                     }
                     return category;
-
                 })
             );
         } catch (error) {
@@ -66,26 +63,6 @@ export const TodoDataProvider = ({ children }) => {
         }
     };
 
-    const updateCategoryName = async (categoryId, newName) => {
-        try {
-            const response = await axios.post('/api/TodoData/updateCategory', {
-                categoryId,
-                categoryName: newName
-            });
-            if (response.status === 200) {
-
-                setTodoCategories(prevCategories =>
-                    prevCategories.map(category =>
-                        category.id === categoryId ? { ...category, name: newName } : category
-                    )
-                );
-            } else {
-                throw new Error('Failed to update category name');
-            }
-        } catch (error) {
-            console.error('Error updating category name:', error);
-        }
-    };
 
     const deleteTodo = async (taskId) => {
         try {
@@ -104,29 +81,9 @@ export const TodoDataProvider = ({ children }) => {
             }
         }
     };
-    //add task 
-    const addTaskToCategory = async (categoryId, newTask) => {
-        try {
-            await axios.post('/api/TodoData/addTask', { categoryId, taskData: newTask });
-            setTodoCategories(prevCategories => {
-                return prevCategories.map(category => {
-                    if (category.id === categoryId) {
-                        return { ...category, child: [...category.child, newTask] };
-
-                    }
-                    return category;
-
-                });
-            });
-        } catch (error) {
-            console.error('Error adding task:', error);
-        }
-    };
-
-
 
     return (
-        <TodoDataContext.Provider value={{ todoCategories, addCategory, deleteCategory, clearAllTasks, updateCategoryName, deleteTodo, addTaskToCategory }}>
+        <TodoDataContext.Provider value={{ todoCategories, addCategory, deleteCategory, clearAllTasks, deleteTodo }}>
             {children}
         </TodoDataContext.Provider>
     );

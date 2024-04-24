@@ -181,6 +181,7 @@ mock.onPost('/api/TodoData/addTask').reply(config => {
     return [200, updatedTodoData];
 });
 
+// addnew cataegory
 mock.onPost('/api/TodoData/addCategory').reply(config => {
     const { categoryName } = JSON.parse(config.data);
     const newCategory = {
@@ -192,7 +193,7 @@ mock.onPost('/api/TodoData/addCategory').reply(config => {
     return [200, newCategory];
 });
 
-
+//updatecategoryname 
 mock.onPost('/api/TodoData/updateCategory').reply(config => {
     const { categoryId, categoryName } = JSON.parse(config.data);
     const updatedTodoData = TodoData.map(category => {
