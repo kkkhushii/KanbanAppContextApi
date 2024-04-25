@@ -19,7 +19,6 @@ function MainTodo() {
 
           />
         ))}
-
       </div >
 
     </>

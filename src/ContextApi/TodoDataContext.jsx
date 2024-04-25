@@ -81,7 +81,7 @@ export const TodoDataProvider = ({ children }) => {
     };
 
     return (
-        <TodoDataContext.Provider value={{ todoCategories, addCategory, deleteCategory, clearAllTasks, deleteTodo, error, setError }}>
+        <TodoDataContext.Provider value={{ todoCategories, addCategory, deleteCategory, clearAllTasks, deleteTodo, setError }}>
             {children}
         </TodoDataContext.Provider>
     );

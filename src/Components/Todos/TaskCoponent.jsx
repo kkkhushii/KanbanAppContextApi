@@ -12,6 +12,7 @@ import TodoDataContext from '../../ContextApi/TodoDataContext'
 function TaskCoponent({ task, onDeleteTask }) {
 
     const { setError } = useContext(TodoDataContext);
+
     // edittask
     const [showEditModal, setShowEditModal] = useState(false);
     const [editedTask, setEditedTask] = useState(task);
@@ -75,6 +76,7 @@ function TaskCoponent({ task, onDeleteTask }) {
                         task={task}
                         editedTask={editedTask}
                         onSave={handleSaveEditedTask}
+
                     />
                 </div>
             </div>

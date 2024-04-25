@@ -12,6 +12,7 @@ function CategoryTodo({ id }) {
 
     const { todoCategories, deleteCategory, clearAllTasks, deleteTodo } = useContext(TodoDataContext);
     const category = todoCategories.find(cat => cat.id === id);
+
     const [allTasks, setAllTasks] = useState(category ? category.child : []);
     const [showModal, setShowModal] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState(category.name);
@@ -25,7 +26,6 @@ function CategoryTodo({ id }) {
         date: new Date(),
         imageURL: null
     });
-
 
     // this is for add task in category modal
     const handleShowModal = () => {
@@ -55,7 +55,6 @@ function CategoryTodo({ id }) {
             console.error('Error updating category:', error);
         }
     };
-
 
     const handleAddTask = async () => {
         try {

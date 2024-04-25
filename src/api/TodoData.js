@@ -146,7 +146,7 @@ const TodoData = [
     ]
 }
 ]
-
+// thi is for  tododata
 mock.onGet('/api/TodoData').reply(200, TodoData);
 
 // this is for delete category  
@@ -159,7 +159,6 @@ mock.onDelete('/api/TodoData').reply(config => {
 //this is for clear all task
 mock.onDelete('/api/TodoData/clearTasks').reply(config => {
     const { categoryId } = JSON.parse(config.data);
-    // Find the category by ID and clear all tasks
     const updatedTodoData = TodoData.map(category => {
         if (category.id === categoryId) {
             return { ...category, child: [] }; 

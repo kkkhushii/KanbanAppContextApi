@@ -4,6 +4,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 function EditCategoryModal({ showModal, handleCloseModal, handleUpdateCategory, initialCategoryName }) {
 
     const [newCategoryName, setNewCategoryName] = useState(initialCategoryName);
+    
     const handleSave = () => {
         handleUpdateCategory(newCategoryName);
         handleCloseModal();
@@ -20,7 +21,6 @@ function EditCategoryModal({ showModal, handleCloseModal, handleUpdateCategory, 
                     value={newCategoryName}
                     onChange={(e) => setNewCategoryName(e.target.value)}
                 />
-
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleCloseModal}>Cancel</Button>

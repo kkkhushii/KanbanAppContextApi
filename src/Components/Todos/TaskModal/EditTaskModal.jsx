@@ -1,12 +1,11 @@
-/* eslint-disable react/prop-types */
-import { Modal, Button, Dropdown } from 'react-bootstrap';
+import { Modal, Button, Form, Dropdown } from 'react-bootstrap';
+
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useState } from 'react';
-import axios from 'axios'
 
-function EditTaskModal({ show, onHide, editedTask, onSave }) {
+function EditTaskModal({ show, onHide, editedTask, onSave, taskProperties }) {
     const [tempEditedTask, setTempEditedTask] = useState(editedTask);
 
     const handleChange = (e) => {
@@ -37,31 +36,6 @@ function EditTaskModal({ show, onHide, editedTask, onSave }) {
         onSave(tempEditedTask);
         onHide();
     };
-    // const handleSaveChanges = async () => {
-    //     try {
-    //         const response = await fetch('/api/TodoData/editTask', {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 taskId: tempEditedTask.id,
-    //                 newData: tempEditedTask,
-    //             }),
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error('Failed to edit task');
-    //         }
-    //         const updatedTaskData = await response.json(); // If the server responds with updated task data
-    //         console.log(updatedTaskData);
-    //         onSave(updatedTaskData);
-    //         onHide();
-    //     } catch (error) {
-    //         console.error('Error editing task:', error);
-    //         // Display an error message to the user or handle the error appropriately
-    //     }
-    // };
-
 
     return (
         <Modal show={show} onHide={onHide}>
@@ -69,7 +43,7 @@ function EditTaskModal({ show, onHide, editedTask, onSave }) {
                 <Modal.Title>Edit Task</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <form>
+                <Form>
                     <div className="mb-3">
                         <label className="form-label">Task</label>
                         <input
@@ -110,36 +84,20 @@ function EditTaskModal({ show, onHide, editedTask, onSave }) {
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Task Property</label>
-                        <Dropdown>
-                            <Dropdown.Toggle variant='none' id="dropdown-basic">
-                                {tempEditedTask.taskProperty} <ArrowDropDownIcon />
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => handlePropertyChange('Design')}>
-                                    Design
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={() => handlePropertyChange('Developement')}>
-                                    Development
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={() => handlePropertyChange('Mobile')}>
-                                    Mobile
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={() => handlePropertyChange('UX Stage')}>
-                                    UX Stage
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={() => handlePropertyChange('Research')}>
-                                    Research
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={() => handlePropertyChange('Data Science')}>
-                                    Data Science
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={() => handlePropertyChange('Branding')}>
-                                    Branding
-                                </Dropdown.Item>
-
-
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <Form.Group controlId="taskProperty" className='AddTaskstyle'>
+                            <Form.Select
+                                value={tempEditedTask.taskProperty}
+                                onChange={(e) => handlePropertyChange(e.target.value)}
+                                className="form-select">
+                                <option value="Design">Design</option>
+                                <option value="Developement">Development</option>
+                                <option value="Mobile">Mobile</option>
+                                <option value="UX Stage">UX Stage</option>
+                                <option value="Research">Research</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Branding">Branding</option>
+                            </Form.Select>
+                        </Form.Group>
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Date</label>
@@ -147,14 +105,14 @@ function EditTaskModal({ show, onHide, editedTask, onSave }) {
                             <DatePicker selected={tempEditedTask.date} onChange={handleDateChange} className="form-control" />
                         </div>
                     </div>
-                </form>
+                </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={onHide}>Close</Button>
                 <Button variant="primary" onClick={handleSaveChanges}>Save Changes</Button>
 
             </Modal.Footer>
-        </Modal>
+        </Modal >
     )
 }
 

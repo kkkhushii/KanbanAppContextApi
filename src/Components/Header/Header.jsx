@@ -7,9 +7,7 @@ import axios from 'axios'
 
 function Header() {
 
-
     const { addCategory, setError } = useContext(TodoDataContext);
-
     const [show, setShow] = useState(false);
     const [listName, setListName] = useState('');
     const handleClose = () => setShow(false);
