@@ -8,6 +8,8 @@ const TodoDataContext = createContext();
 export const TodoDataProvider = ({ children }) => {
 
     const [todoCategories, setTodoCategories] = useState([]);
+    const [error, setError] = useState(null);
+
 
     // this is for get data 
     useEffect(() => {
@@ -15,41 +17,39 @@ export const TodoDataProvider = ({ children }) => {
             try {
                 const response = await axios.get('/api/TodoData');
                 setTodoCategories(response.data);
-                // console.log(todoCategories);
+                setError(null);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                handleError(error.message);
             }
         };
 
         fetchData();
     }, []);
 
-    // this is for delete categoty 
-    const deleteCategory = async (categoryId) => {
+    const handleError = (errorMessage) => {
+        setError(errorMessage);
+    };
+
+    const deleteCategory = async (categoryId, setTodoCategories) => {
         try {
-            await axios.delete('/api/TodoData', { data: { id: categoryId } });
-            setTodoCategories(prevCategories =>
-                prevCategories.filter(category => category.id !== categoryId)
-            );
+
+            const response = await axios.delete('/api/TodoData', { data: { id: categoryId } });
+            setTodoCategories(response.data);
+            setError(null);
         } catch (error) {
-            console.error('Error deleting category:', error);
+            handleError(error.message);
         }
     };
 
+
     const clearAllTasks = async (categoryId) => {
         try {
-            await axios.delete('/api/TodoData/clearTasks', { data: { categoryId } });
-            setTodoCategories(prevCategories =>
-                prevCategories.map(category => {
-                    if (category.id === categoryId) {
-                        return { ...category, child: [] };
-
-                    }
-                    return category;
-                })
-            );
+            const response = await axios.delete('/api/TodoData/clearTasks', { data: { categoryId } });
+            const updatedTodoData = response.data;
+            setTodoCategories(updatedTodoData);
+            setError(null);
         } catch (error) {
-            console.error('Error clearing tasks:', error);
+            handleError(error.message);
         }
     };
 
@@ -58,32 +58,30 @@ export const TodoDataProvider = ({ children }) => {
         try {
             const response = await axios.post('/api/TodoData/addCategory', { categoryName });
             setTodoCategories(prevCategories => [...prevCategories, response.data]);
+            setError(null);
         } catch (error) {
-            console.error('Error adding category:', error);
+            handleError(error.message);
         }
     };
-
 
     const deleteTodo = async (taskId) => {
         try {
             await axios.delete('/api/TodoData/deleteTask', { data: { taskId } });
+            // Update the tasks state directly by filtering out the deleted task
             setTodoCategories(prevCategories => {
-                return prevCategories.map(category => {
-                    const updatedChild = category.child.filter(task => task.id !== taskId);
-                    return { ...category, child: updatedChild };
-                });
+                const updatedCategories = prevCategories.map(category => ({
+                    ...category,
+                    child: category.child.filter(task => task.id !== taskId)
+                }));
+                return updatedCategories;
             });
         } catch (error) {
-            if (error.response && error.response.status === 404) {
-                console.error('404 Error: Resource not found');
-            } else {
-                console.error('Error deleting task:', error);
-            }
+            handleError(error.message);
         }
     };
 
     return (
-        <TodoDataContext.Provider value={{ todoCategories, addCategory, deleteCategory, clearAllTasks, deleteTodo }}>
+        <TodoDataContext.Provider value={{ todoCategories, addCategory, deleteCategory, clearAllTasks, deleteTodo, error, setError }}>
             {children}
         </TodoDataContext.Provider>
     );

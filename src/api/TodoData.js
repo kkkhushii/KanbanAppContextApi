@@ -219,15 +219,11 @@ mock.onPut('/api/TodoData/editTask').reply(config => {
     return [200, TodoData];
 });
 
+
 // deletetask
-let tasks = [];
-mock.onDelete('/api/TodoData/deleteTask').reply(config => {
+  mock.onDelete('/api/TodoData/deleteTask').reply(config => {
     const { taskId } = JSON.parse(config.data);
-
-     tasks = tasks.filter(task => task.id !== taskId);
-  
     return [200, { message: 'Task deleted successfully' }];
-  });
-
+});
 
 export default TodoData;

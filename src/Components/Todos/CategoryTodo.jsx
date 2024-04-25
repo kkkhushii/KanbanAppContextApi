@@ -64,8 +64,6 @@ function CategoryTodo({ id }) {
                 categoryId: id,
                 newTaskData: { ...newTaskData, id: Math.random(), taskImage: newTaskData.imageURL }
             });
-
-
             if (response.status === 200) {
 
                 setNewTaskData({
@@ -88,6 +86,8 @@ function CategoryTodo({ id }) {
             console.error('Error adding task:', error);
         }
     };
+
+
     const handleClearAll = () => {
         clearAllTasks(id);
         setAllTasks([]);

@@ -5,11 +5,13 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Dropdown } from 'react-bootstrap';
 import EditTaskModal from '../Todos/TaskModal/EditTaskModal';
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
+import TodoDataContext from '../../ContextApi/TodoDataContext'
 
 function TaskCoponent({ task, onDeleteTask }) {
 
+    const { setError } = useContext(TodoDataContext);
     // edittask
     const [showEditModal, setShowEditModal] = useState(false);
     const [editedTask, setEditedTask] = useState(task);
@@ -38,54 +40,12 @@ function TaskCoponent({ task, onDeleteTask }) {
             if (response.status === 200) {
                 setEditedTask(editedTaskData);
             } else {
-
                 throw new Error('Failed to edit task');
             }
         } catch (error) {
-            console.error('Error editing task:', error);
+            setError(error.message)
         }
     };
-
-
-    // const handleSaveEditedTask = async (editedTaskData) => {
-    //     try {
-    //         console.log('Edited Task Data:', editedTaskData); // Log the edited task data
-
-    //         const response = await fetch('/api/TodoData/editTask', {
-
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 taskId: editedTaskData.id,
-    //                 newData: editedTaskData,
-    //             }),
-    //         })
-
-    //         // const response = await fetch('/api/TodoData/editTask');
-    //         // console.log(response);
-    //         // const json = await response.json();
-    //         // setEditedTask(json);
-
-
-    //         if (!response.ok) {
-    //             throw new Error('Failed to edit task');
-    //         }
-
-    //         // Update the task data in the state if the request is successful
-    //         setEditedTask(editedTaskData);
-    //         console.log('Edited Task Data:', editedTaskData);
-
-    //     } catch (error) {
-    //         console.error('Error editing task:', error);
-    //         // Handle the error or display an error message to the user
-    //     }
-    // };
-
-
-
-
 
     const handleDeleteClick = () => {
         onDeleteTask(task.id);

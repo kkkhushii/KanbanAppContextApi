@@ -8,39 +8,25 @@ import axios from 'axios'
 function Header() {
 
 
-    const { addCategory } = useContext(TodoDataContext);
+    const { addCategory, setError } = useContext(TodoDataContext);
 
     const [show, setShow] = useState(false);
     const [listName, setListName] = useState('');
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    // const handleSave = () => {
-
-    //     addCategory(listName);
-    //     setListName('');
-    //     setShow(false);
-
-    // };
     const handleSave = async () => {
         try {
-            // Make an HTTP POST request to your API endpoint
-            const response = await axios.post('/api/TodoData/addCategory', { categoryName: listName });
-            // Check if the request was successful
-            if (response.status === 200) {
-                // Add the new category to the context
-                addCategory(listName);
-                // Reset the input field and close the modal
-                setListName('');
-                setShow(false);
-            } else {
-                throw new Error('Failed to add category');
-            }
-        } catch (error) {
-            console.error('Error adding category:', error);
 
+            const response = await axios.post('/api/TodoData/addCategory', { categoryName: listName });
+            addCategory(response.data.name);
+            setListName('');
+            setShow(false);
+        } catch (error) {
+            setError(error.message);
         }
     };
+
     return (
         <>
             <div className="card card-body p-2 mb-2">
