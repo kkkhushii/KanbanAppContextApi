@@ -1,6 +1,7 @@
 import { Modal, Button, Form } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useState } from 'react';
+import { TaskProperties } from '../../../api/TaskData'
 
 function EditTaskModal({ show, onHide, editedTask, onSave }) {
     const [tempEditedTask, setTempEditedTask] = useState(editedTask);
@@ -80,14 +81,14 @@ function EditTaskModal({ show, onHide, editedTask, onSave }) {
                             <Form.Select
                                 value={tempEditedTask.taskProperty}
                                 onChange={(e) => handlePropertyChange(e.target.value)}
-                                className="form-select">
-                                <option value="Design">Design</option>
-                                <option value="Developement">Development</option>
-                                <option value="Mobile">Mobile</option>
-                                <option value="UX Stage">UX Stage</option>
-                                <option value="Research">Research</option>
-                                <option value="Data Science">Data Science</option>
-                                <option value="Branding">Branding</option>
+                                className="form-select"
+                            >
+
+                                {TaskProperties.map((property) => (
+                                    <option key={property} value={property}>
+                                        {property}
+                                    </option>
+                                ))}
                             </Form.Select>
                         </Form.Group>
                     </div>

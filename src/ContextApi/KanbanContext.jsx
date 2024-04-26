@@ -2,10 +2,10 @@ import { createContext, useState, useEffect } from "react"
 import axios from 'axios'
 
 
-const TodoDataContext = createContext();
+const KanbanDataContext = createContext();
 
 
-export const TodoDataProvider = ({ children }) => {
+export const KanbanDataContextProvider = ({ children }) => {
 
     const [todoCategories, setTodoCategories] = useState([]);
     const [error, setError] = useState(null);
@@ -24,6 +24,7 @@ export const TodoDataProvider = ({ children }) => {
         };
 
         fetchData();
+
     }, []);
 
     const handleError = (errorMessage) => {
@@ -64,29 +65,23 @@ export const TodoDataProvider = ({ children }) => {
         }
     };
 
-    const deleteTodo = async (taskId) => {
+    const deleteTodo = async (taskId, setTodoCategories) => {
         try {
-            await axios.delete('/api/TodoData/deleteTask', { data: { taskId } });
-            // Update the tasks state directly by filtering out the deleted task
-            setTodoCategories(prevCategories => {
-                const updatedCategories = prevCategories.map(category => ({
-                    ...category,
-                    child: category.child.filter(task => task.id !== taskId)
-                }));
-                return updatedCategories;
-            });
+            const response = await axios.delete('/api/TodoData/deleteTask', { data: { taskId } });
+            setTodoCategories(response.data);
+
         } catch (error) {
             handleError(error.message);
         }
     };
 
     return (
-        <TodoDataContext.Provider value={{ todoCategories, addCategory, deleteCategory, clearAllTasks, deleteTodo, setError }}>
+        <KanbanDataContext.Provider value={{ todoCategories, addCategory, deleteCategory, clearAllTasks, deleteTodo, setError }}>
             {children}
-        </TodoDataContext.Provider>
+        </KanbanDataContext.Provider>
     );
 
 }
 
 
-export default TodoDataContext;
+export default KanbanDataContext;

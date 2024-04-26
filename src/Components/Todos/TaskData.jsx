@@ -4,14 +4,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Dropdown } from 'react-bootstrap';
-import EditTaskModal from '../Todos/TaskModal/EditTaskModal';
+import EditTaskModal from './TaskModal/EditTaskModal';
 import { useContext, useState } from 'react'
 import axios from 'axios'
-import TodoDataContext from '../../ContextApi/TodoDataContext'
+import KanbanDataContext from '../../ContextApi/KanbanContext'
 
-function TaskCoponent({ task, onDeleteTask }) {
+function TaskData({ task, onDeleteTask }) {
 
-    const { setError } = useContext(TodoDataContext);
+    const { setError } = useContext(KanbanDataContext);
 
     // edittask
     const [showEditModal, setShowEditModal] = useState(false);
@@ -108,7 +108,7 @@ function TaskCoponent({ task, onDeleteTask }) {
     )
 }
 
-export default TaskCoponent
+export default TaskData
 
 
 

@@ -1,16 +1,16 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState } from 'react'
 import { Dropdown } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import TaskCoponent from '../Todos/TaskCoponent'
-import EditCategoryModal from '../Todos/TaskModal/EditCategoryModal'
-import AddNewTaskModal from '../Todos/TaskModal/AddNewTaskModal'
-import TodoDataContext from '../../ContextApi/TodoDataContext'
+import TaskData from './TaskData';
+import EditCategoryModal from './TaskModal/EditCategoryModal'
+import AddNewTaskModal from './TaskModal/AddNewTaskModal'
+import KanbanDataContext from '../../ContextApi/KanbanContext'
 import axios from 'axios'
 
-function CategoryTodo({ id }) {
+function CategoryTaskList({ id }) {
 
-    const { todoCategories, deleteCategory, clearAllTasks, deleteTodo } = useContext(TodoDataContext);
+    const { todoCategories, deleteCategory, clearAllTasks, deleteTodo } = useContext(KanbanDataContext);
     const category = todoCategories.find(cat => cat.id === id);
 
     const [allTasks, setAllTasks] = useState(category ? category.child : []);
@@ -18,7 +18,8 @@ function CategoryTodo({ id }) {
     const [newCategoryName, setNewCategoryName] = useState(category.name);
     const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
     const [showContainer, setShowContainer] = useState(true);
-    const taskProperties = ['Design', 'Development', 'UI Design', 'Research', 'UX Stage', 'Data Science', 'Branding'];
+    // const taskProperties = ['Design', 'Development', 'UI Design', 'Research', 'UX Stage', 'Data Science', 'Branding'];
+
     const [newTaskData, setNewTaskData] = useState({
         task: '',
         taskText: '',
@@ -123,14 +124,21 @@ function CategoryTodo({ id }) {
                                 {category.name === 'Todo' && (
                                     <>
                                         <AddIcon onClick={handleShowModal} />
-                                        <AddNewTaskModal
+                                        {/* <AddNewTaskModal
                                             show={showModal}
                                             onHide={handleCloseModal}
                                             onSave={handleAddTask}
                                             taskProperties={taskProperties}
                                             newTaskData={newTaskData}
                                             setNewTaskData={setNewTaskData}
-
+                                            updateTasks={() => setAllTasks([...allTasks, newTaskData])}
+                                        /> */}
+                                        <AddNewTaskModal
+                                            show={showModal}
+                                            onHide={handleCloseModal}
+                                            onSave={handleAddTask}
+                                            newTaskData={newTaskData}
+                                            setNewTaskData={setNewTaskData}
                                             updateTasks={() => setAllTasks([...allTasks, newTaskData])}
                                         />
                                     </>
@@ -158,7 +166,7 @@ function CategoryTodo({ id }) {
 
                     <div className='connect-sorting-content'>
                         {allTasks.map(task => (
-                            <TaskCoponent key={task.id} task={task} onDeleteTask={handleDeleteTask} />
+                            <TaskData key={task.id} task={task} onDeleteTask={handleDeleteTask} />
                         ))}
 
                     </div>
@@ -169,4 +177,4 @@ function CategoryTodo({ id }) {
     )
 }
 
-export default CategoryTodo
+export default CategoryTaskList

@@ -1,7 +1,10 @@
 import { Modal, Button, Form } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
+import { TaskProperties } from '../../../api/TaskData'
 
-function AddNewList({ show, onHide, onSave, taskProperties, newTaskData, setNewTaskData, updateTasks }) {
+// function AddNewList({ show, onHide, onSave, taskProperties, newTaskData, setNewTaskData, updateTasks }) {
+function AddNewList({ show, onHide, onSave, newTaskData, setNewTaskData, updateTasks }) {
+
     const { task, taskText, taskProperty, date, taskImage } = newTaskData;
 
     const handleSave = () => {
@@ -53,11 +56,13 @@ function AddNewList({ show, onHide, onSave, taskProperties, newTaskData, setNewT
                             value={taskProperty}
                             onChange={(e) => setNewTaskData({ ...newTaskData, taskProperty: e.target.value })}>
                             <option value="">Select Task Property</option>
-                            {taskProperties.map(property => (
+                            {TaskProperties.map(property => (
                                 <option key={property} value={property}>
                                     {property}
                                 </option>
+
                             ))}
+
                         </Form.Select>
                     </Form.Group>
                     <Form.Group controlId="dueDate" className='AddTaskstyle'>

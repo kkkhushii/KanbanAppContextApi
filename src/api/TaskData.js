@@ -2,7 +2,7 @@ import image1 from '../assets/kanban-img-1.jpg';
 import image2 from '../assets/kanban-img-2.jpg';
 import image3 from '../assets/my-card.jpg';
 import image4 from '../assets/profilebg.jpg';
-import mock from '../_MockApis/mock';
+import mock from './mock';
 
 
 const TodoData = [
@@ -146,6 +146,10 @@ const TodoData = [
     ]
 }
 ]
+
+export const TaskProperties = [...new Set(TodoData.flatMap(category => category.child.map(task => task.taskProperty)))];
+
+
 // thi is for  tododata
 mock.onGet('/api/TodoData').reply(200, TodoData);
 
@@ -222,7 +226,8 @@ mock.onPut('/api/TodoData/editTask').reply(config => {
 // deletetask
   mock.onDelete('/api/TodoData/deleteTask').reply(config => {
     const { taskId } = JSON.parse(config.data);
-    return [200, { message: 'Task deleted successfully' }];
+    const updatedTodoData = TodoData.filter(task => task.id !== taskId);
+    return [200, updatedTodoData];
 });
 
 export default TodoData;
