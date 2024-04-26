@@ -5,7 +5,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Dropdown } from 'react-bootstrap';
 import EditTaskModal from '../Todos/TaskModal/EditTaskModal';
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import axios from 'axios'
 import TodoDataContext from '../../ContextApi/TodoDataContext'
 
@@ -30,7 +30,12 @@ function TaskCoponent({ task, onDeleteTask }) {
                         editedTask.taskProperty === 'Data Science' ? '#ff6692' :
                             editedTask.taskProperty === 'Branding' ? '#36c76c' : '#fff';
 
-
+    const formatDate = (selectedDate) => {
+        const dateObj = new Date(selectedDate);
+        const day = dateObj.getDate();
+        const month = dateObj.toLocaleString('default', { month: 'long' });
+        return `${day} ${month}`;
+    };
 
     const handleSaveEditedTask = async (editedTaskData) => {
         try {
@@ -76,7 +81,6 @@ function TaskCoponent({ task, onDeleteTask }) {
                         task={task}
                         editedTask={editedTask}
                         onSave={handleSaveEditedTask}
-
                     />
                 </div>
             </div>
@@ -92,7 +96,7 @@ function TaskCoponent({ task, onDeleteTask }) {
                     <div className="tb-section-1">
                         <span className="hstack gap-2">
                             <CalendarTodayIcon style={{ fontSize: "1.125rem" }} />
-                            {editedTask.date}
+                            {formatDate(editedTask.date)}
                         </span>
                     </div>
                     <div className="tb-section-2">

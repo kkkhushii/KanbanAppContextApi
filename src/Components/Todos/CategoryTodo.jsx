@@ -23,9 +23,10 @@ function CategoryTodo({ id }) {
         task: '',
         taskText: '',
         taskProperty: '',
-        date: new Date(),
+        date: new Date().toISOString().split('T')[0],
         imageURL: null
     });
+
 
     // this is for add task in category modal
     const handleShowModal = () => {
@@ -64,14 +65,12 @@ function CategoryTodo({ id }) {
                 newTaskData: { ...newTaskData, id: Math.random(), taskImage: newTaskData.imageURL }
             });
             if (response.status === 200) {
-
                 setNewTaskData({
                     taskText: '',
                     taskProperty: '',
                     date: newTaskData.date,
                     imageURL: ''
                 });
-
                 handleCloseModal();
                 setNewTaskData('Task added successfully');
                 console.log('Task added successfully:', response.data);

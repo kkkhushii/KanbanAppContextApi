@@ -1,35 +1,22 @@
-import { Modal, Button, Form, Dropdown } from 'react-bootstrap';
-
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import DatePicker from 'react-datepicker';
+import { Modal, Button, Form } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useState } from 'react';
 
-function EditTaskModal({ show, onHide, editedTask, onSave, taskProperties }) {
+function EditTaskModal({ show, onHide, editedTask, onSave }) {
     const [tempEditedTask, setTempEditedTask] = useState(editedTask);
 
+    // this is for formated date 24 july to mm/dd/yyyy
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const formattedDate = date.toISOString().split('T')[0];
+        return formattedDate;
+    };
     const handleChange = (e) => {
         const { name, value } = e.target;
         setTempEditedTask({ ...tempEditedTask, [name]: value });
     };
     const handlePropertyChange = (property) => {
         setTempEditedTask({ ...tempEditedTask, taskProperty: property });
-    };
-
-    const handleDateChange = (date) => {
-        const day = date.getDate();
-        const month = date.toLocaleString('default', { month: 'long' });
-        const formattedDate = `${day} ${month}`;
-        setTempEditedTask({ ...tempEditedTask, date: formattedDate });
-    };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setTempEditedTask({ ...tempEditedTask, taskImage: reader.result });
-        };
-        reader.readAsDataURL(file);
     };
 
     const handleSaveChanges = () => {
@@ -62,24 +49,29 @@ function EditTaskModal({ show, onHide, editedTask, onSave, taskProperties }) {
                     <div className="mb-3">
                         <label className="form-label">Task Image</label>
                         {tempEditedTask.taskImage ? (
+
                             <div>
                                 <img src={tempEditedTask.taskImage} alt="Task Image" className="img-fluid" />
                                 <input
-                                    type="file"
-                                    accept="image/*"
-                                    className="form-control"
-                                    name="taskImageFile"
-                                    onChange={(e) => handleImageChange(e)}
+                                    type="text"
+                                    className="form-control mt-2"
+                                    placeholder="Change Image URL"
+                                    name="taskImageURL"
+                                    value={tempEditedTask.taskImage}
+                                    onChange={(e) => setTempEditedTask({ ...tempEditedTask, taskImage: e.target.value })}
                                 />
+
                             </div>
                         ) : (
                             <input
-                                type="file"
-                                accept="image/*"
-                                className="form-control"
-                                name="taskImageFile"
-                                onChange={(e) => handleImageChange(e)}
+                                type="text"
+                                className="form-control mt-2"
+                                placeholder="Type Image URL"
+                                name="taskImageURL"
+                                value={tempEditedTask.taskImage}
+                                onChange={(e) => setTempEditedTask({ ...tempEditedTask, taskImage: e.target.value })}
                             />
+
                         )}
                     </div>
                     <div className="mb-3">
@@ -102,7 +94,12 @@ function EditTaskModal({ show, onHide, editedTask, onSave, taskProperties }) {
                     <div className="mb-3">
                         <label className="form-label">Date</label>
                         <div>
-                            <DatePicker selected={tempEditedTask.date} onChange={handleDateChange} className="form-control" />
+                            <input
+                                type="date"
+                                value={formatDate(tempEditedTask.date)}
+                                onChange={(e) => setTempEditedTask({ ...tempEditedTask, date: e.target.value })}
+                                className="form-control"
+                            />
                         </div>
                     </div>
                 </Form>
@@ -110,7 +107,6 @@ function EditTaskModal({ show, onHide, editedTask, onSave, taskProperties }) {
             <Modal.Footer>
                 <Button variant="secondary" onClick={onHide}>Close</Button>
                 <Button variant="primary" onClick={handleSaveChanges}>Save Changes</Button>
-
             </Modal.Footer>
         </Modal >
     )
